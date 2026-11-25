@@ -46,3 +46,30 @@ test("Startseite im Portal-Rahmen", async () => {
   expect(html.match(/<h1/g)).toHaveLength(1);
   expect(res.headers.get("set-cookie")).toBeNull();
 });
+
+test("Startseite zeigt die Lerngruppen als barrierefreie Tabelle", async () => {
+  const res = await fetch(`${app.base}/`, { headers: asStudent() });
+  expect(res.status).toBe(200);
+  const html = await res.text();
+  expect(html).toContain("<h1>Lerngruppen</h1>");
+  expect(html).toContain('<caption id="lerngruppen-caption">Alle Lerngruppen</caption>');
+  expect(html).toContain('<th scope="col">Name</th>');
+  expect(html).toContain('<th scope="col">Thema</th>');
+  expect(html).toContain('<th scope="col" class="num">Freie Plätze</th>');
+  expect(html).toContain('<th scope="col" class="num">Plätze gesamt</th>');
+  expect(html).toContain('<th scope="row">Mathe-Treff</th>');
+  expect(html).toContain("Analysis 1");
+  // volle Gruppe: nicht nur über Farbe, sondern mit Wort
+  expect(html).toContain("0 (voll)");
+  // nur ansehen: im Seiteninhalt kein Formular und kein Knopf
+  const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
+  expect(main).toContain("Mathe-Treff");
+  expect(main).not.toMatch(/<form|<button/);
+});
+
+test("Startseite ist nur für Studierende freigegeben", async () => {
+  const res = await fetch(`${app.base}/`, {
+    headers: { "X-Portal-Assertion": makeToken(app.portal, { roles: ["employee"] }), Accept: "text/html" },
+  });
+  expect(res.status).toBe(403);
+});

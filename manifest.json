@@ -1,8 +1,8 @@
 {
-  "slug": "meine-app",
-  "name": "Meine App",
-  "category": "Sonstiges",
-  "menu": { "label": "Meine App", "icon": "info" },
+  "slug": "pilot-js",
+  "name": "Lerngruppen",
+  "category": "Studium",
+  "menu": { "label": "Lerngruppen", "icon": "people" },
   "roles": ["student"],
   "version": "0.1.0"
 }
