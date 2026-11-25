@@ -1,3 +1,31 @@
-<h1>Meine App</h1>
+<h1>Lerngruppen</h1>
 
-<p class="lead">Hier entsteht Ihre Anwendung.</p>
+<p class="lead">Hier sehen Sie alle Lerngruppen mit Thema und Plätzen.</p>
+
+{% if lerngruppen.length %}
+<div class="table-wrap" role="region" aria-labelledby="lerngruppen-caption" tabindex="0">
+  <table class="table">
+    <caption id="lerngruppen-caption">Alle Lerngruppen</caption>
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Thema</th>
+        <th scope="col" class="num">Freie Plätze</th>
+        <th scope="col" class="num">Plätze gesamt</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for gruppe in lerngruppen %}
+      <tr>
+        <th scope="row">{{ gruppe.name }}</th>
+        <td>{{ gruppe.thema }}</td>
+        <td class="num">{% if gruppe.plaetzeFrei > 0 %}{{ gruppe.plaetzeFrei }}{% else %}0 (voll){% endif %}</td>
+        <td class="num">{{ gruppe.plaetzeGesamt }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p>Es gibt noch keine Lerngruppen.</p>
+{% endif %}
